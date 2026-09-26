@@ -59,4 +59,13 @@ for (const file of fs.readdirSync(eventsDir).filter((f) => f.endsWith('.js'))) {
 process.on('unhandledRejection', (err) => console.error('[unhandledRejection]', err));
 process.on('uncaughtException', (err) => console.error('[uncaughtException]', err));
 
-client.login(config.token);
+client.login(config.token.trim().replace(/^["']|["']$/g, '')).catch((err) => {
+  if (err.code === 'TokenInvalid' || /invalid token/i.test(err.message)) {
+    console.error("❌ Token invalide. Va sur le Developer Portal > Bot > Reset Token, puis colle le nouveau token dans la variable DISCORD_TOKEN (sans espace ni guillemets).");
+  } else if (/disallowed intents/i.test(err.message)) {
+    console.error('❌ Intents non autorisés. Developer Portal > Bot > active « Server Members Intent » et « Message Content Intent »' + (config.enablePresences ? ' et « Presence Intent »' : '') + ', puis Save Changes.');
+  } else {
+    console.error('❌ Connexion à Discord impossible :', err);
+  }
+  process.exit(1);
+});
