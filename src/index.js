@@ -59,7 +59,23 @@ for (const file of fs.readdirSync(eventsDir).filter((f) => f.endsWith('.js'))) {
 process.on('unhandledRejection', (err) => console.error('[unhandledRejection]', err));
 process.on('uncaughtException', (err) => console.error('[uncaughtException]', err));
 
-client.login(config.token.trim().replace(/^["']|["']$/g, '')).catch((err) => {
+// Nettoyage du token : espaces, retours à la ligne, guillemets, préfixe « Bot » collés par erreur
+const token = config.token
+  .replace(/\s+/g, '')
+  .replace(/^["'`]+|["'`]+$/g, '')
+  .replace(/^Bot(?=[A-Za-z0-9_-]{20,}\.)/i, '')
+  .replace(/^DISCORD_TOKEN=/, '');
+if (!/^[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{4,}\.[A-Za-z0-9_-]{20,}$/.test(token)) {
+  console.error(
+    `❌ DISCORD_TOKEN n'a pas le format d'un token Discord (${token.length} caractères, début : "${token.slice(0, 4)}…").\n` +
+      '   Va sur le Developer Portal > ton application > Bot > Reset Token, copie le token avec le bouton « Copy »\n' +
+      '   et colle-le SEUL dans la variable DISCORD_TOKEN sur Railway (sans guillemets, sans espace, sans « DISCORD_TOKEN= »).\n' +
+      "   ⚠️ Ne confonds pas avec l'Application ID, la Public Key ou le Client Secret.",
+  );
+  process.exit(1);
+}
+
+client.login(token).catch((err) => {
   if (err.code === 'TokenInvalid' || /invalid token/i.test(err.message)) {
     console.error("❌ Token invalide. Va sur le Developer Portal > Bot > Reset Token, puis colle le nouveau token dans la variable DISCORD_TOKEN (sans espace ni guillemets).");
   } else if (/disallowed intents/i.test(err.message)) {
