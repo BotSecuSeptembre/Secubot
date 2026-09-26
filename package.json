@@ -1,0 +1,19 @@
+{
+  "name": "botsecu",
+  "version": "1.0.0",
+  "description": "Bot Discord de sécurité complet : modération, automodération, antiraid, antinuke, vérification, modmail et logs.",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "check": "node scripts/check.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.4"
+  }
+}
