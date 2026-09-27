@@ -22,7 +22,7 @@ function list(guildId) {
     .map((f) => {
       try {
         const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
-        return { id: data.id, name: data.name, createdAt: data.createdAt, auto: data.auto, roles: data.roles.length, channels: data.channels.length };
+        return { id: data.id, name: data.name, createdAt: data.createdAt, auto: data.auto, roles: data.roles.length, channels: data.channels.length, emojis: data.emojis?.length ?? 0, bans: data.bans?.length ?? 0 };
       } catch {
         return null;
       }
@@ -60,7 +60,7 @@ function serializeOverwrites(channel) {
     .filter(Boolean);
 }
 
-function create(guild, name, auto = false) {
+async function create(guild, name, auto = false) {
   const id = Date.now().toString(36);
   const roles = guild.roles.cache
     .filter((r) => r.id !== guild.id && !r.managed)
@@ -82,6 +82,11 @@ function create(guild, name, auto = false) {
       userLimit: c.userLimit ?? null,
       overwrites: serializeOverwrites(c),
     }));
+  const emojis = guild.emojis.cache.map((e) => ({ name: e.name, url: e.imageURL({ extension: e.animated ? 'gif' : 'png' }), animated: e.animated }));
+  const bans = await guild.bans
+    .fetch({ limit: 1000 })
+    .then((b) => b.map((x) => ({ id: x.user.id, tag: x.user.tag, reason: x.reason ?? null })))
+    .catch(() => []);
   const data = {
     id,
     name: name || (auto ? 'Sauvegarde automatique' : 'Sauvegarde'),
@@ -93,9 +98,14 @@ function create(guild, name, auto = false) {
       explicitContentFilter: guild.explicitContentFilter,
       defaultMessageNotifications: guild.defaultMessageNotifications,
       everyonePermissions: guild.roles.everyone.permissions.bitfield.toString(),
+      systemChannelName: guild.systemChannel?.name ?? null,
+      afkChannelName: guild.afkChannel?.name ?? null,
+      afkTimeout: guild.afkTimeout,
     },
     roles,
     channels,
+    emojis,
+    bans,
   };
   const dir = dirFor(guild.id);
   fs.mkdirSync(dir, { recursive: true });
@@ -111,15 +121,33 @@ function create(guild, name, auto = false) {
   return data;
 }
 
-/** Restaure les rôles et salons manquants. Renvoie un résumé. */
-async function restore(guild, data, reason) {
-  const summary = { roles: 0, channels: 0, errors: 0 };
+/**
+ * Restaure une sauvegarde. Renvoie un résumé.
+ * options.full     : remet aussi à l'identique les rôles et permissions de salons EXISTANTS
+ * options.settings : réglages du serveur (niveau de vérification, filtre, notifications, perms @everyone)
+ * options.emojis   : recrée les emojis manquants
+ * options.bans     : re-bannit les utilisateurs bannis au moment de la sauvegarde
+ */
+async function restore(guild, data, reason, options = {}) {
+  const summary = { roles: 0, rolesReset: 0, channels: 0, channelsReset: 0, emojis: 0, bans: 0, settings: false, errors: 0 };
   const roleMap = new Map([['@everyone', guild.roles.everyone.id]]); // ancien id / nom -> nouvel id
 
   for (const r of data.roles) {
     const existing = guild.roles.cache.get(r.id) ?? guild.roles.cache.find((x) => x.name === r.name && !x.managed);
     if (existing) {
       roleMap.set(r.id, existing.id);
+      if (options.full && existing.editable) {
+        const changed =
+          existing.permissions.bitfield !== BigInt(r.permissions) || existing.color !== r.color || existing.hoist !== r.hoist || existing.mentionable !== r.mentionable;
+        if (changed) {
+          const ok = await existing
+            .edit({ permissions: BigInt(r.permissions), color: r.color, hoist: r.hoist, mentionable: r.mentionable, reason })
+            .then(() => true)
+            .catch(() => false);
+          if (ok) summary.rolesReset++;
+          else summary.errors++;
+        }
+      }
       continue;
     }
     try {
@@ -154,7 +182,15 @@ async function restore(guild, data, reason) {
     guild.channels.cache.get(c.id) ?? guild.channels.cache.find((x) => x.name === c.name && x.type === c.type && (x.parent?.name ?? null) === c.parentName);
 
   for (const c of [...data.channels.filter((x) => x.type === ChannelType.GuildCategory), ...data.channels.filter((x) => x.type !== ChannelType.GuildCategory)]) {
-    if (exists(c)) continue;
+    const current = exists(c);
+    if (current) {
+      if (options.full && current.permissionOverwrites) {
+        const ok = await current.permissionOverwrites.set(resolveOverwrites(c.overwrites), reason).then(() => true).catch(() => false);
+        if (ok) summary.channelsReset++;
+        else summary.errors++;
+      }
+      continue;
+    }
     const parent = c.parentName ? guild.channels.cache.find((x) => x.type === ChannelType.GuildCategory && x.name === c.parentName) : null;
     try {
       await guild.channels.create({
@@ -174,16 +210,55 @@ async function restore(guild, data, reason) {
       summary.errors++;
     }
   }
+
+  if (options.settings && data.guild) {
+    const s = data.guild;
+    const find = (name, type) => (name ? guild.channels.cache.find((x) => x.name === name && x.type === type)?.id : undefined);
+    const ok = await guild
+      .edit({
+        verificationLevel: s.verificationLevel,
+        explicitContentFilter: s.explicitContentFilter,
+        defaultMessageNotifications: s.defaultMessageNotifications,
+        systemChannel: find(s.systemChannelName, ChannelType.GuildText),
+        afkChannel: find(s.afkChannelName, ChannelType.GuildVoice),
+        afkTimeout: s.afkTimeout ?? undefined,
+        reason,
+      })
+      .then(() => true)
+      .catch(() => false);
+    const okPerms = await guild.roles.everyone.setPermissions(BigInt(s.everyonePermissions), reason).then(() => true).catch(() => false);
+    summary.settings = ok && okPerms;
+    if (!summary.settings) summary.errors++;
+  }
+
+  if (options.emojis) {
+    for (const e of data.emojis ?? []) {
+      if (guild.emojis.cache.some((x) => x.name === e.name)) continue;
+      const ok = await guild.emojis.create({ attachment: e.url, name: e.name, reason }).then(() => true).catch(() => false);
+      if (ok) summary.emojis++;
+      else summary.errors++;
+    }
+  }
+
+  if (options.bans) {
+    const current = await guild.bans.fetch({ limit: 1000 }).catch(() => null);
+    for (const b of data.bans ?? []) {
+      if (current?.has(b.id)) continue;
+      const ok = await guild.members.ban(b.id, { reason: `Restauration : ${b.reason ?? 'ban de la sauvegarde'}` }).then(() => true).catch(() => false);
+      if (ok) summary.bans++;
+      else summary.errors++;
+    }
+  }
   return summary;
 }
 
 /** Sauvegarde automatique quotidienne des serveurs qui l'ont activée. */
-function runAutoBackups(client) {
+async function runAutoBackups(client) {
   for (const guild of client.guilds.cache.values()) {
     const g = db.guild(guild.id);
     if (!g.config.autoBackup || Date.now() - (g.lastAutoBackup || 0) < 86_400_000) continue;
     try {
-      create(guild, null, true);
+      await create(guild, null, true);
       g.lastAutoBackup = Date.now();
       db.save();
     } catch (err) {

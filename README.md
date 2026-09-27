@@ -130,29 +130,30 @@ Autres commandes : `/verification scan` (fiche d'un membre à tout moment), `/ve
 | `/lockdown on/off` | Verrouille tous les salons |
 | `/massban` | Ban en masse par IDs ou « tous les arrivés depuis X minutes » |
 
-| `/backup creer/liste/charger/supprimer/auto` | Sauvegarde des rôles, salons et permissions ; la restauration recrée **uniquement ce qui manque** (propriétaire du serveur seulement) |
+| `/audit` | Note de sécurité /100 : réglages Discord, permissions dangereuses, bots admin, protections actives |
+| `/backup creer/liste/info/charger/supprimer/auto` | Sauvegarde rôles, salons, permissions, emojis, bannis et réglages. Restauration : mode **manquants** (recrée ce qui a été supprimé) ou **complet** (remet aussi les permissions modifiées) + options réglages / emojis / bannis. Rien n'est jamais supprimé. Propriétaire du serveur seulement |
 | `/quarantaine ajouter/retirer/liste` | Isole un membre suspect : ses rôles sont mis de côté puis rendus |
 | `/suspects recents/avatars/nouveaux_comptes` | Analyse de risque des arrivées, groupes d'avatars identiques, comptes très récents |
 | `/arrivees` | Dernières arrivées (âge du compte, invitation, vérifié ou non) |
 
 ### 🔨 Modération
-`/ban` (avec durée = tempban) · `/unban` · `/kick` · `/softban` · `/mute` · `/unmute` · `/mutes` · `/warn` · `/warnings list/remove/clear` · `/purge` (filtres : membre, bots, liens, invitations, pièces jointes, texte) · `/slowmode` · `/lock` · `/hide` · `/nuke` · `/nick` · `/dehoist` · `/role` · `/roleall` · `/banlist` · `/case voir/raison` · `/modlogs` · `/modstats` · `/note` · `/snipe`
+`/ban` (avec durée = tempban) · `/unban` · `/kick` · `/softban` · `/mute` · `/unmute` · `/mutes` · `/warn` · `/warnings list/remove/clear` · `/purge` (filtres : membre, bots, liens, invitations, pièces jointes, texte) · `/slowmode` · `/lock` · `/hide` · `/nuke` · `/nick` · `/dehoist` · `/role` · `/roleall` · `/banlist` · `/case voir/raison` · `/modlogs` · `/modstats` · `/note` · `/snipe` · `/clearuser` (messages d'un utilisateur dans tous les salons) · `/temprole` · `/vocal` · `/prune` · `/export` (CSV pour Excel)
 
 ### 🧰 Utilitaires
-`/annonce` (formulaire multi-lignes, image, couleur, mention) · `/say` · `/rolepanel` (jusqu'à 10 rôles à cliquer ; les rôles avec permissions de modération sont refusés) · `/invites membre/classement/codes`
+`/annonce` (formulaire multi-lignes, image, couleur, mention) · `/say` · `/rolepanel` (jusqu'à 10 rôles à cliquer ; les rôles avec permissions de modération sont refusés) · `/invites membre/classement/codes` · `/sondage` · `/rappel`
 
 ### 🖱️ Clic droit (Applications)
 - **Signaler le message** (tout le monde) : envoie le message au staff avec les boutons « Supprimer » / « Traité ». Salon : `/logs set type:Signalements` (sinon logs de modération).
 - **Scanner le membre** (staff) : fiche d'analyse complète du membre.
 
 ### ℹ️ Informations
-`/help` · `/changelog` · `/userinfo` · `/serverinfo` · `/roleinfo` · `/avatar` · `/botinfo` · `/ping`
+`/help` · `/changelog` · `/perms` · `/userinfo` · `/serverinfo` · `/roleinfo` · `/avatar` · `/botinfo` · `/ping`
 
 ---
 
 ## 🤖 Détails des protections
 
-**Automod** (le staff avec « Gérer les messages » est ignoré) : spam, messages répétés, invitations Discord, liens (avec liste blanche de domaines), mentions de masse, @everyone/@here, majuscules, emojis, zalgo, retours à la ligne, mots interdits. Sanction : suppression, avertissement ou mute. S'applique aussi aux messages modifiés.
+**Automod** (le staff avec « Gérer les messages » est ignoré) : spam, messages répétés, invitations Discord, liens (avec liste blanche de domaines), mentions de masse, @everyone/@here, majuscules, emojis, zalgo, retours à la ligne, mots interdits, alerte **ghost ping**. Sanction : suppression, avertissement ou mute. S'applique aussi aux messages modifiés.
 
 **Paliers d'avertissements** : ex. 3 warns → mute 1h, 5 → kick, 7 → ban (`/warnconfig`).
 

@@ -55,6 +55,7 @@ const defaultGuildConfig = () => ({
     antiCaps: { enabled: false, percent: 70, minLength: 12 },
     antiEmoji: { enabled: false, limit: 10 },
     antiZalgo: true,
+    antiGhostPing: true,
     antiNewlines: { enabled: false, limit: 15 },
     badWords: [],
     ignoredChannels: [],
@@ -91,6 +92,7 @@ const defaultData = () => ({
     presence: null,
     blacklist: [],
     blacklistedGuilds: [],
+    reminders: [],
   },
   guilds: {},
   users: {},
@@ -152,11 +154,11 @@ class Database {
   /** Données brutes d'un serveur (config + historique). */
   guild(guildId) {
     if (!this.data.guilds[guildId]) {
-      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0 };
+      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [] };
       this.save();
     }
     const g = this.data.guilds[guildId];
-    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0 });
+    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [] });
     return g;
   }
 

@@ -5,6 +5,9 @@ const { sendLog } = require('./logger');
 const { addWarn, logCase } = require('./moderation');
 const { colors } = require('../config');
 
+/** Messages supprimés par l'automod (pour ne pas les signaler comme ghost ping) */
+const botDeleted = new Set();
+
 /** guildId:userId -> [{ t, content }] */
 const history = new Map();
 
@@ -79,6 +82,8 @@ async function runAutomod(message) {
 
   const guild = message.guild;
   const me = guild.members.me;
+  botDeleted.add(message.id);
+  setTimeout(() => botDeleted.delete(message.id), 30_000);
   await message.delete().catch(() => null);
   if (hit.purge) {
     // supprime aussi les messages récents du spammeur dans ce salon
@@ -128,4 +133,4 @@ setInterval(() => {
   for (const [key, list] of history) if (!list.some((m) => now - m.t < 30_000)) history.delete(key);
 }, 60_000).unref();
 
-module.exports = { runAutomod };
+module.exports = { runAutomod, botDeleted };

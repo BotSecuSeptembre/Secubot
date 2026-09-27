@@ -13,7 +13,20 @@ const { runAutoBackups } = require('./backup');
 function startScheduler(client) {
   const tick = async () => {
     const now = Date.now();
-    runAutoBackups(client);
+    await runAutoBackups(client);
+
+    // Rappels personnels
+    const due = db.global.reminders.filter((r) => r.at <= now);
+    if (due.length) {
+      db.global.reminders = db.global.reminders.filter((r) => r.at > now);
+      db.save();
+      for (const r of due) {
+        const user = await client.users.fetch(r.userId).catch(() => null);
+        await user
+          ?.send({ embeds: [embed(null).setTitle('⏰ Rappel').setDescription(`${r.text}${r.channelUrl ? `\n\n[Créé ici](${r.channelUrl})` : ''}`)] })
+          .catch(() => null);
+      }
+    }
     for (const guild of client.guilds.cache.values()) {
       const g = db.guild(guild.id);
 
@@ -26,6 +39,17 @@ function startScheduler(client) {
           const user = await client.users.fetch(t.userId).catch(() => null);
           const ok = await guild.members.unban(t.userId, 'Fin du bannissement temporaire').then(() => true).catch(() => false);
           if (ok && user) await logCase(guild, { type: 'unban', target: user, moderator: client.user, reason: 'Fin du bannissement temporaire' });
+        }
+      }
+
+      // Rôles temporaires
+      const endedRoles = g.temproles.filter((t) => t.until <= now);
+      if (endedRoles.length) {
+        g.temproles = g.temproles.filter((t) => t.until > now);
+        db.save();
+        for (const t of endedRoles) {
+          const member = await guild.members.fetch(t.userId).catch(() => null);
+          await member?.roles.remove(t.roleId, 'Fin du rôle temporaire').catch(() => null);
         }
       }
 

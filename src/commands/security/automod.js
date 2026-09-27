@@ -15,6 +15,7 @@ const FILTERS = [
   { name: 'Anti-emojis', value: 'antiEmoji' },
   { name: 'Anti-zalgo', value: 'antiZalgo' },
   { name: 'Anti-retours à la ligne', value: 'antiNewlines' },
+  { name: 'Alerte ghost ping', value: 'antiGhostPing' },
 ];
 
 module.exports = {
@@ -108,6 +109,7 @@ module.exports = {
                 `${on(val('antiEmoji'))} Anti-emojis (${cfg.antiEmoji.limit}+)`,
                 `${on(cfg.antiZalgo)} Anti-zalgo`,
                 `${on(val('antiNewlines'))} Anti-retours à la ligne (${cfg.antiNewlines.limit}+)`,
+                `${on(cfg.antiGhostPing)} Alerte ghost ping (mention puis suppression)`,
                 `📝 Mots interdits : **${cfg.badWords.length}**`,
                 '',
                 `**Salons ignorés :** ${cfg.ignoredChannels.map((id) => `<#${id}>`).join(' ') || 'aucun'}`,
