@@ -29,7 +29,9 @@ module.exports = {
               name: '🪪 Vérification',
               value: `${on(c.verification.enabled)} Panneau ${ch(c.verification.panelChannelId)} • Staff ${ch(c.verification.staffChannelId)}\nRôle vérifié ${role(c.verification.verifiedRoleId)} • Rôle staff ${role(c.verification.staffRoleId)}\nAuto-kick : ${c.verification.autoKickHours ? `${c.verification.autoKickHours}h` : 'non'}`,
             },
-            { name: '📜 Logs', value: `Modération ${ch(c.logs.mod)} • Messages ${ch(c.logs.messages)}\nMembres ${ch(c.logs.members)} • Serveur ${ch(c.logs.server)}` },
+            { name: '📜 Logs', value: `Modération ${ch(c.logs.mod)} • Messages ${ch(c.logs.messages)}\nMembres ${ch(c.logs.members)} • Serveur ${ch(c.logs.server)}\nSignalements ${ch(c.logs.reports)}` },
+            { name: '🔒 Quarantaine', value: `Rôle ${role(c.quarantine.roleId)}`, inline: true },
+            { name: '💾 Sauvegarde auto', value: on(c.autoBackup), inline: true },
           ),
       ],
     });

@@ -17,7 +17,12 @@ const defaultGuildConfig = () => ({
     messages: null, // suppression / édition
     members: null, // arrivées / départs / pseudos / rôles
     server: null, // salons, rôles, antinuke, antiraid
+    reports: null, // signalements des membres
   },
+  quarantine: {
+    roleId: null,
+  },
+  autoBackup: false,
   modmail: {
     enabled: false,
     channelId: null,
@@ -147,11 +152,11 @@ class Database {
   /** Données brutes d'un serveur (config + historique). */
   guild(guildId) {
     if (!this.data.guilds[guildId]) {
-      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [] };
+      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0 };
       this.save();
     }
     const g = this.data.guilds[guildId];
-    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [] });
+    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0 });
     return g;
   }
 

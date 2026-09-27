@@ -12,7 +12,7 @@ module.exports = {
     }
 
     try {
-      if (interaction.isChatInputCommand()) {
+      if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
         if (command.ownerOnly && !isOwner(interaction.user.id)) {

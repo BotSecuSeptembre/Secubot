@@ -5,12 +5,16 @@ const CATEGORIES = {
   security: { label: 'Sécurité', emoji: '🛡️', description: 'Vérification, modmail, automod, antiraid, antinuke' },
   moderation: { label: 'Modération', emoji: '🔨', description: 'Sanctions, avertissements, purge, historique' },
   config: { label: 'Configuration', emoji: '⚙️', description: 'Thème, logs, setup automatique' },
+  utility: { label: 'Utilitaires', emoji: '🧰', description: 'Annonces, panneau de rôles, invitations' },
+  context: { label: 'Clic droit', emoji: '🖱️', description: 'Actions via clic droit > Applications' },
   info: { label: 'Informations', emoji: 'ℹ️', description: 'Infos utilisateur, serveur, bot' },
   owner: { label: 'Propriétaire', emoji: '👑', description: 'Réservé aux propriétaires du bot' },
 };
 
 function describe(command) {
   const json = command.data.toJSON();
+  if (json.type === 2) return [`🖱️ Clic droit sur un **membre** > Applications > **${json.name}**`];
+  if (json.type === 3) return [`🖱️ Clic droit sur un **message** > Applications > **${json.name}**`];
   const subs = (json.options ?? []).filter((o) => o.type === 1);
   if (!subs.length) return [`\`/${json.name}\` — ${json.description}`];
   return subs.map((s) => `\`/${json.name} ${s.name}\` — ${s.description}`);

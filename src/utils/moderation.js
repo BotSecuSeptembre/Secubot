@@ -19,6 +19,8 @@ const ACTION_LABELS = {
   antiraid: '🛡️ Antiraid',
   antinuke: '☢️ Antinuke',
   verification: '🪪 Vérification',
+  quarantine: '🔒 Quarantaine',
+  unquarantine: '🔓 Fin de quarantaine',
 };
 
 const isOwner = (userId) => ownerIds.includes(userId);

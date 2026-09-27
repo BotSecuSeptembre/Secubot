@@ -2,6 +2,7 @@ const db = require('../database');
 const { logCase } = require('./moderation');
 const { sendLog } = require('./logger');
 const { embed } = require('./embed');
+const { runAutoBackups } = require('./backup');
 
 /**
  * Tâches périodiques :
@@ -12,6 +13,7 @@ const { embed } = require('./embed');
 function startScheduler(client) {
   const tick = async () => {
     const now = Date.now();
+    runAutoBackups(client);
     for (const guild of client.guilds.cache.values()) {
       const g = db.guild(guild.id);
 

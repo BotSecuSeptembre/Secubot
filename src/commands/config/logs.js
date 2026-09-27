@@ -7,6 +7,7 @@ const TYPES = [
   { name: 'Messages (suppressions, modifications)', value: 'messages' },
   { name: 'Membres (arrivées, départs, rôles, pseudos)', value: 'members' },
   { name: 'Serveur (salons, rôles, antiraid, antinuke)', value: 'server' },
+  { name: 'Signalements des membres', value: 'reports' },
 ];
 
 module.exports = {
@@ -54,13 +55,13 @@ module.exports = {
         { id: guild.members.me.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks] },
       ];
       const category = await guild.channels.create({ name: '🔒 Logs', type: ChannelType.GuildCategory, permissionOverwrites: overwrites });
-      const names = { mod: '📕-logs-modération', messages: '💬-logs-messages', members: '👥-logs-membres', server: '⚙️-logs-serveur' };
+      const names = { mod: '📕-logs-modération', messages: '💬-logs-messages', members: '👥-logs-membres', server: '⚙️-logs-serveur', reports: '🚩-signalements' };
       for (const [type, name] of Object.entries(names)) {
         const channel = await guild.channels.create({ name, type: ChannelType.GuildText, parent: category.id, permissionOverwrites: overwrites });
         logs[type] = channel.id;
       }
       db.save();
-      return replySuccess(interaction, `Catégorie ${category} créée avec 4 salons de logs (visibles uniquement par les admins). Ajoute ton rôle staff à la catégorie si besoin.`);
+      return replySuccess(interaction, `Catégorie ${category} créée avec 5 salons de logs (visibles uniquement par les admins). Ajoute ton rôle staff à la catégorie si besoin.`);
     }
     return reply(interaction, {
       embeds: [

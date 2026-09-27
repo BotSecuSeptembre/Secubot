@@ -36,6 +36,11 @@ module.exports = {
       await member.roles.add(cfg.verification.unverifiedRoleId, 'Vérification : membre non vérifié').catch(() => null);
     }
 
+    // Quarantaine persistante : quitter/revenir ne permet pas d'en sortir
+    if (g.quarantine[member.id] && cfg.quarantine.roleId) {
+      await member.roles.add(cfg.quarantine.roleId, 'Quarantaine (a quitté puis rejoint)').catch(() => null);
+    }
+
     // Rôles persistants anti-contournement : un membre muté qui quitte/revient reste muté
     if (previous.timeoutUntil && previous.timeoutUntil > Date.now() && member.moderatable) {
       await member.timeout(previous.timeoutUntil - Date.now(), 'Contournement de mute (a quitté puis rejoint)').catch(() => null);
