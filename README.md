@@ -104,6 +104,18 @@ Autres commandes : `/verification scan` (fiche d'un membre à tout moment), `/ve
 
 ---
 
+## 🌐 Site du serveur
+
+Le bot sert aussi un site public qui affiche **en direct** le serveur : membres (statut, rôles, boosts), membres en vocal, salons publics, rôles, équipe, arrivées et départs récents. Aucune dépendance supplémentaire, aucun dépôt séparé : le site tourne dans le même processus que le bot.
+
+- **Activer sur Railway :** onglet **Settings → Networking → Generate Domain**. Railway fournit `PORT` automatiquement. Ajoute ensuite `SITE_URL` avec l'adresse obtenue.
+- **Variables :** `SITE_GUILD_ID` (serveur affiché), `SITE_INVITE_URL` (bouton « Rejoindre »), `SITE_CONTACT`, `SITE_ENABLED=false` pour le couper. Voir `.env.example`.
+- **Temps réel :** mises à jour poussées au navigateur (Server Sent Events) au plus toutes les 1,5 s. Les statuts en ligne exigent `ENABLE_PRESENCES=true` ; sinon le site affiche le nombre approximatif fourni par Discord.
+- **Vie privée :** seuls les salons visibles par un membre ordinaire (rôle vérifié si la vérification est active) sont affichés. Aucun cookie, aucun outil d'audience, aucun script tiers, aucun journal des visites. Les images hébergées par Discord (avatars, icône, emojis) ne se chargent qu'après accord du visiteur ; sinon, initiales. Pages **Confidentialité**, **CGU** et **Cookies** incluses.
+- **`/site masquer`** : un membre se retire du site (le staff peut masquer quelqu'un d'autre) · **`/site afficher`** · **`/site lien`**.
+
+---
+
 ## 📋 Liste des commandes
 
 ### 👑 Propriétaire du bot (`OWNER_IDS`)
@@ -147,7 +159,7 @@ Autres commandes : `/verification scan` (fiche d'un membre à tout moment), `/ve
 - **Scanner le membre** (staff) : fiche d'analyse complète du membre.
 
 ### ℹ️ Informations
-`/help` · `/changelog` · `/perms` · `/userinfo` · `/serverinfo` · `/roleinfo` · `/avatar` · `/botinfo` · `/ping`
+`/help` · `/changelog` · `/site` · `/perms` · `/userinfo` · `/serverinfo` · `/roleinfo` · `/avatar` · `/botinfo` · `/ping`
 
 ---
 
@@ -176,6 +188,7 @@ src/
 ├── commands/           # commandes slash par catégorie
 ├── components/         # boutons / menus / formulaires (vérification, modmail)
 ├── events/             # événements Discord (arrivées, messages, logs d'audit…)
+├── web/                # site public en direct (serveur HTTP, pages, styles)
 └── utils/              # analyse de risque, automod, antiraid, modmail, logs…
 ```
 

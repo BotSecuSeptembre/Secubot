@@ -4,6 +4,17 @@
  */
 module.exports = [
   {
+    version: '1.3.0',
+    date: '2026-10-01',
+    title: 'Site du serveur en direct',
+    changes: [
+      '🌐 Site public intégré au bot : membres, statuts, vocal, salons publics, rôles et équipe mis à jour en temps réel',
+      '✨ Design soigné : typographie auto-hébergée, en-tête du serveur, courbes d\'évolution sur 24 h, fiche membre détaillée',
+      '🔒 Aucun cookie ni traceur, images Discord chargées seulement avec l\'accord du visiteur, pages Confidentialité, CGU et Cookies',
+      '🙈 /site masquer et /site afficher : chaque membre choisit d\'apparaître ou non sur le site',
+    ],
+  },
+  {
     version: '1.2.0',
     date: '2026-09-27',
     title: 'Audit de sécurité, backup complet et outils de nettoyage',

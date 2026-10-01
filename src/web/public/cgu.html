@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conditions d'utilisation · {{SERVER_NAME}}</title>
+<meta name="description" content="Conditions générales d'utilisation du site du serveur {{SERVER_NAME}}.">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/common.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/"><span class="brand-icon brand-fallback" aria-hidden="true">{{SERVER_INITIAL}}</span><span class="brand-name" id="brand-name">{{SERVER_NAME}}</span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/#apercu" data-route="apercu">Aperçu</a>
+      <a href="/#membres" data-route="membres">Membres</a>
+      <a href="/#salons" data-route="salons">Salons</a>
+      <a href="/#roles" data-route="roles">Rôles</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <article class="wrap prose">
+    <h1>Conditions générales d'utilisation</h1>
+    <p class="updated">Mise à jour le {{UPDATED}}</p>
+
+    <h2>Objet</h2>
+    <p>Les présentes conditions encadrent l'utilisation du site du serveur Discord <strong>{{SERVER_NAME}}</strong>. Consulter le site vaut acceptation de ces conditions.</p>
+
+    <h2>Éditeur</h2>
+    <p>Le site est édité bénévolement par l'équipe du serveur. Il n'est ni affilié à Discord Inc., ni approuvé par cette société. Discord est une marque de Discord Inc.</p>
+
+    <h2>Accès au site</h2>
+    <p>Le site est gratuit et accessible sans inscription. L'équipe s'efforce de le maintenir disponible mais ne garantit pas un accès continu : il peut être interrompu pour maintenance, en cas de panne de Discord ou de l'hébergeur, ou fermé à tout moment.</p>
+
+    <h2>Contenu</h2>
+    <p>Les informations affichées sont transmises par Discord en temps réel. Pseudos, avatars, noms de salons et de rôles sont choisis par les membres et l'équipe du serveur, qui en restent responsables. L'équipe ne garantit pas l'exactitude ou l'exhaustivité de ces informations à un instant donné.</p>
+    <p>Le règlement du serveur s'applique au contenu publié sur Discord. Un contenu inapproprié peut être signalé à l'équipe via {{CONTACT}}.</p>
+
+    <h2>Utilisation autorisée</h2>
+    <p>Le site est destiné à la consultation personnelle. Sont interdits :</p>
+    <ul>
+      <li>l'aspiration automatisée ou massive des données affichées ;</li>
+      <li>la réutilisation des données des membres pour les contacter, les démarcher ou les profiler ;</li>
+      <li>toute tentative de perturber le fonctionnement du site ou d'accéder à des données non publiques.</li>
+    </ul>
+    <p>Les données des membres restent soumises aux <a href="https://discord.com/terms" target="_blank" rel="noopener noreferrer">conditions d'utilisation de Discord</a>.</p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>La présentation et le code du site appartiennent à l'équipe du serveur. Les avatars, emojis, icônes et bannières appartiennent à leurs auteurs respectifs.</p>
+
+    <h2>Responsabilité</h2>
+    <p>L'équipe ne saurait être tenue responsable d'un dommage résultant de l'utilisation du site, d'une indisponibilité ou d'une information inexacte transmise par Discord. Les liens externes renvoient vers des sites dont l'équipe ne contrôle pas le contenu.</p>
+
+    <h2>Données personnelles</h2>
+    <p>Le traitement des données est décrit dans la <a href="/confidentialite">politique de confidentialité</a> et la page <a href="/cookies">Cookies</a>.</p>
+
+    <h2>Modification et droit applicable</h2>
+    <p>Ces conditions peuvent évoluer. La version en ligne fait foi. Elles sont soumises au droit français.</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>{{SERVER_NAME}} · Données synchronisées en direct depuis Discord</span>
+    <nav class="footer-links" aria-label="Informations légales">
+      <a href="/confidentialite">Confidentialité</a>
+      <a href="/cgu">Conditions d'utilisation</a>
+      <a href="/cookies">Cookies</a>
+      <button type="button" class="linklike" data-consent-open>Gérer mes choix</button>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
