@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cookies · {{SERVER_NAME}}</title>
+<meta name="description" content="Cookies, traceurs et contenu tiers du site du serveur {{SERVER_NAME}}.">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/common.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/"><span class="brand-icon brand-fallback" aria-hidden="true">{{SERVER_INITIAL}}</span><span class="brand-name" id="brand-name">{{SERVER_NAME}}</span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/#apercu" data-route="apercu">Aperçu</a>
+      <a href="/#membres" data-route="membres">Membres</a>
+      <a href="/#salons" data-route="salons">Salons</a>
+      <a href="/#roles" data-route="roles">Rôles</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <article class="wrap prose">
+    <h1>Cookies et traceurs</h1>
+    <p class="updated">Mise à jour le {{UPDATED}}</p>
+
+    <p>Ce site <strong>ne dépose aucun cookie</strong>. Il n'utilise ni outil de mesure d'audience, ni publicité, ni bouton de réseau social, ni police ou script chargé depuis un autre site.</p>
+
+    <h2>Ce qui est enregistré dans votre navigateur</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nom</th><th>Rôle</th><th>Durée</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><code>choix_images</code></td><td>Mémoriser votre choix sur les images Discord, accepté ou refusé, pour ne pas vous le redemander à chaque visite.</td><td>6 mois</td><td>Stockage local, strictement nécessaire</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Cette donnée reste dans votre navigateur. Elle n'est jamais envoyée au serveur ni à un tiers. Elle est exemptée de consentement car elle sert uniquement à respecter votre choix.</p>
+
+    <h2>Contenu tiers soumis à votre accord</h2>
+    <p>Les avatars des membres, l'icône, la bannière et les emojis du serveur sont hébergés par <strong>Discord</strong>. Les afficher oblige votre navigateur à les télécharger depuis les serveurs de Discord, qui reçoit alors votre adresse IP et des informations techniques sur votre navigateur.</p>
+    <p>Ces images ne sont donc chargées <strong>qu'après votre accord</strong>. Si vous refusez, aucune requête n'est envoyée à Discord : les avatars sont remplacés par des initiales et le site reste entièrement utilisable. Aucune adresse ni information de navigation vous concernant n'est envoyée à Discord par le site.</p>
+
+    <h2>Votre choix</h2>
+    <div class="choice">
+      <span id="choice-state" class="muted">Aucun choix enregistré.</span>
+      <div class="choice-actions">
+        <button type="button" class="button" id="choice-refuse">Refuser</button>
+        <button type="button" class="button" id="choice-accept">Accepter</button>
+      </div>
+    </div>
+    <p>Vous pouvez modifier ce choix à tout moment ici ou depuis le lien « Gérer mes choix » en bas de chaque page. Effacer les données du site dans votre navigateur supprime aussi ce choix.</p>
+
+    <h2>En savoir plus</h2>
+    <p>Consultez la <a href="/confidentialite">politique de confidentialité</a> du site et les <a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs" target="_blank" rel="noopener noreferrer">recommandations de la CNIL</a> sur les cookies et traceurs.</p>
+    <script src="/assets/cookies.js" defer></script>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>{{SERVER_NAME}} · Données synchronisées en direct depuis Discord</span>
+    <nav class="footer-links" aria-label="Informations légales">
+      <a href="/confidentialite">Confidentialité</a>
+      <a href="/cgu">Conditions d'utilisation</a>
+      <a href="/cookies">Cookies</a>
+      <button type="button" class="linklike" data-consent-open>Gérer mes choix</button>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

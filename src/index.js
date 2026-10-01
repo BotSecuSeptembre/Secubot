@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const config = require('./config');
+const { startWebsite } = require('./web');
 
 if (!config.token) {
   console.error('❌ DISCORD_TOKEN manquant. Ajoute-le dans les variables d\'environnement (Railway > Variables).');
@@ -18,6 +19,7 @@ const intents = [
   GatewayIntentBits.GuildWebhooks,
   GatewayIntentBits.GuildEmojisAndStickers,
   GatewayIntentBits.DirectMessages,
+  GatewayIntentBits.GuildVoiceStates, // site : membres en vocal
 ];
 if (config.enablePresences) intents.push(GatewayIntentBits.GuildPresences);
 
@@ -74,6 +76,8 @@ if (!/^[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{4,}\.[A-Za-z0-9_-]{20,}$/.test(token)) 
   );
   process.exit(1);
 }
+
+startWebsite(client);
 
 client.login(token).catch((err) => {
   if (err.code === 'TokenInvalid' || /invalid token/i.test(err.message)) {

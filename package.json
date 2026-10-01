@@ -1,6 +1,6 @@
 {
   "name": "botsecu",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Bot Discord de sécurité complet : modération, automodération, antiraid, antinuke, vérification, modmail et logs.",
   "main": "src/index.js",
   "private": true,

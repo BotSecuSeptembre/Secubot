@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidentialité · {{SERVER_NAME}}</title>
+<meta name="description" content="Données affichées et traitées par le site du serveur {{SERVER_NAME}}.">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/common.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/"><span class="brand-icon brand-fallback" aria-hidden="true">{{SERVER_INITIAL}}</span><span class="brand-name" id="brand-name">{{SERVER_NAME}}</span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/#apercu" data-route="apercu">Aperçu</a>
+      <a href="/#membres" data-route="membres">Membres</a>
+      <a href="/#salons" data-route="salons">Salons</a>
+      <a href="/#roles" data-route="roles">Rôles</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <article class="wrap prose">
+    <h1>Politique de confidentialité</h1>
+    <p class="updated">Mise à jour le {{UPDATED}}</p>
+
+    <p>Ce site présente en direct le serveur Discord <strong>{{SERVER_NAME}}</strong>. Il est édité par l'équipe du serveur et fonctionne avec le bot de sécurité du serveur. Cette page explique quelles données sont affichées, d'où elles viennent et comment vous retirer du site.</p>
+
+    <h2>Données affichées</h2>
+    <p>Le site n'affiche que des informations déjà visibles par tout membre du serveur dans Discord :</p>
+    <ul>
+      <li>pseudo, nom d'utilisateur, avatar et couleur de rôle des membres ;</li>
+      <li>rôles, statut de connexion (si Discord le fournit) et présence dans un salon vocal ;</li>
+      <li>date d'arrivée sur le serveur et boost éventuel ;</li>
+      <li>arrivées et départs récents, conservés en mémoire uniquement (20 au maximum, effacés à chaque redémarrage) ;</li>
+      <li>historique sur 24 heures du nombre total de membres et de membres en ligne, sans aucune donnée individuelle, conservé en mémoire uniquement ;</li>
+      <li>nom, sujet et catégorie des salons accessibles à tous les membres. Les salons privés ne sont jamais affichés.</li>
+    </ul>
+    <p>Ne sont jamais affichés : messages, adresses email, adresses IP, sanctions, notes de modération, fiches de vérification ou tout autre contenu privé.</p>
+
+    <h2>Origine et finalité</h2>
+    <p>Les données proviennent de l'API de Discord, lue par le bot du serveur. Elles servent uniquement à présenter la communauté. Elles ne sont ni vendues, ni louées, ni transmises à des tiers, et ne servent à aucun profilage ni à la publicité.</p>
+    <p>La base légale est l'intérêt légitime de la communauté à présenter le serveur à ses membres et aux personnes intéressées, équilibré par le droit de chaque membre à se retirer du site à tout moment.</p>
+
+    <h2>Données des visiteurs</h2>
+    <p>Le site ne crée pas de compte, ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience et ne conserve aucun journal des visites. Votre choix concernant les images Discord est enregistré uniquement dans votre navigateur (voir la page <a href="/cookies">Cookies</a>).</p>
+    <p>L'hébergeur technique du site peut conserver des journaux de connexion pendant une durée limitée, pour des raisons de sécurité et selon ses propres conditions.</p>
+
+    <h2>Services tiers</h2>
+    <p>Aucun script tiers n'est chargé. Seules les images (avatars, icône, bannière, emojis) sont hébergées par Discord, et elles ne s'affichent qu'avec votre accord. Leur chargement transmet votre adresse IP à Discord, qui applique sa propre <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">politique de confidentialité</a>.</p>
+
+    <h2>Ne plus apparaître sur le site</h2>
+    <p>Tout membre peut se retirer du site immédiatement, sans justification, avec la commande <code>/site masquer</code> sur le serveur. La commande <code>/site afficher</code> annule ce choix. Vous restez compté dans le nombre total de membres, sans être identifiable.</p>
+    <p>Quitter le serveur supprime aussi vos informations du site, en direct.</p>
+
+    <h2>Vos droits</h2>
+    <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de limitation. Pour les exercer, contactez l'équipe via {{CONTACT}}. Vous pouvez aussi adresser une réclamation à la <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer">CNIL</a>.</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>{{SERVER_NAME}} · Données synchronisées en direct depuis Discord</span>
+    <nav class="footer-links" aria-label="Informations légales">
+      <a href="/confidentialite">Confidentialité</a>
+      <a href="/cgu">Conditions d'utilisation</a>
+      <a href="/cookies">Cookies</a>
+      <button type="button" class="linklike" data-consent-open>Gérer mes choix</button>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

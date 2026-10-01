@@ -154,11 +154,11 @@ class Database {
   /** Données brutes d'un serveur (config + historique). */
   guild(guildId) {
     if (!this.data.guilds[guildId]) {
-      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [] };
+      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] } };
       this.save();
     }
     const g = this.data.guilds[guildId];
-    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [] });
+    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] } });
     return g;
   }
 

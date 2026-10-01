@@ -49,5 +49,14 @@ for (const file of fs.readdirSync(path.join(root, 'utils'))) {
   }
 }
 
+for (const file of ['snapshot.js', 'server.js', 'index.js']) {
+  try {
+    require(path.join(root, 'web', file));
+  } catch (err) {
+    errors++;
+    console.error(`❌ web/${file} : ${err.message}`);
+  }
+}
+
 console.log(errors ? `\n${errors} erreur(s)` : `✅ ${names.size} commandes valides, événements et composants OK`);
 process.exit(errors ? 1 : 0);
