@@ -3,6 +3,8 @@ const { Events } = require('discord.js');
 const config = require('../config');
 const { buildSnapshot } = require('./snapshot');
 const { createSiteServer } = require('./server');
+const adminLogs = require('./admin/logs');
+const adminApi = require('./admin/api');
 
 /**
  * Site public du serveur : liste en temps réel des membres, salons et rôles.
@@ -16,6 +18,7 @@ const UPDATED = '1er octobre 2026';
 
 function startWebsite(client) {
   if (!config.siteEnabled) return null;
+  adminLogs.captureConsole();
 
   const source = new EventEmitter();
   const feed = [];
@@ -46,6 +49,7 @@ function startWebsite(client) {
     }
     return snapshot;
   };
+  source.admin = (request) => adminApi.handle({ client, guild: guild(), ...request });
   source.meta = () => ({
     name: guild()?.name ?? 'Serveur Discord',
     updated: UPDATED,

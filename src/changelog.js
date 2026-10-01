@@ -4,6 +4,18 @@
  */
 module.exports = [
   {
+    version: '1.4.0',
+    date: '2026-10-01',
+    title: 'Espace d\'administration sur le site',
+    changes: [
+      '🔐 Espace « Administration » protégé par mot de passe (empreinte scrypt, essais limités, session sécurisée)',
+      '🛠️ Gestion du bot depuis le navigateur : protections, mode raid, lockdown, messages et encadrés, purge, mode lent, verrouillage, statut du bot',
+      '👤 Fiche complète de chaque membre avec actions : avertir, rendre muet, expulser, bannir, renommer, rôles, note, message privé',
+      '📜 Journaux en direct (console du bot et logs du serveur) et historique complet des sanctions et des bannis',
+      '🔗 /site lien est réservé aux administrateurs',
+    ],
+  },
+  {
     version: '1.3.0',
     date: '2026-10-01',
     title: 'Site du serveur en direct',

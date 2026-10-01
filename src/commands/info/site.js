@@ -7,7 +7,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('site')
     .setDescription('Site public du serveur')
-    .addSubcommand((s) => s.setName('lien').setDescription('Adresse du site du serveur'))
+    .addSubcommand((s) => s.setName('lien').setDescription('Adresse du site du serveur (administrateurs)'))
     .addSubcommand((s) =>
       s
         .setName('masquer')
@@ -24,6 +24,9 @@ module.exports = {
     const sub = interaction.options.getSubcommand();
 
     if (sub === 'lien') {
+      if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+        return replyError(interaction, 'Cette commande est réservée aux administrateurs du serveur.');
+      }
       if (!config.siteUrl) return replyError(interaction, 'Le site n\'a pas encore d\'adresse publique (variable `SITE_URL`).');
       return replySuccess(interaction, `Site du serveur : ${config.siteUrl}`, true);
     }

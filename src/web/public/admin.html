@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{SERVER_NAME}}</title>
-<meta name="description" content="Membres, salons et rôles du serveur Discord {{SERVER_NAME}}, en direct.">
+<title>Administration · {{SERVER_NAME}}</title>
+<meta name="description" content="Espace d'administration réservé.">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -12,25 +12,28 @@
 <link rel="preload" href="/assets/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 <script src="/assets/common.js" defer></script>
-<script src="/assets/app.js" defer></script>
+<meta name="robots" content="noindex, nofollow">
+<script src="/assets/admin.js" defer></script>
 </head>
-<body>
-<a class="sr-only" href="#main">Aller au contenu</a>
+<body class="admin">
 <header class="topbar">
   <div class="wrap topbar-inner">
-    <a class="brand" href="/"><span id="brand-icon"><span class="brand-icon brand-fallback" aria-hidden="true"></span></span><span class="brand-name" id="brand-name">{{SERVER_NAME}}</span></a>
-    <nav class="nav" aria-label="Navigation principale">
-      <a href="#apercu" data-route="apercu">Aperçu</a>
+    <a class="brand" href="/"><span class="brand-icon brand-fallback" aria-hidden="true">{{SERVER_INITIAL}}</span><span class="brand-name">{{SERVER_NAME}}</span><span class="brand-tag">Administration</span></a>
+    <nav class="nav" id="admin-nav" aria-label="Administration" hidden>
+      <a href="#tableau" data-route="tableau">Tableau de bord</a>
       <a href="#membres" data-route="membres">Membres</a>
-      <a href="#salons" data-route="salons">Salons</a>
-      <a href="#roles" data-route="roles">Rôles</a>
+      <a href="#messages" data-route="messages">Salons</a>
+      <a href="#sanctions" data-route="sanctions">Sanctions</a>
+      <a href="#journaux" data-route="journaux">Journaux</a>
+      <a href="#bot" data-route="bot">Bot</a>
     </nav>
-    <span class="live" id="live" data-state="connecting" role="status">Connexion</span>
+    <button type="button" class="button small" id="logout" hidden>Se déconnecter</button>
   </div>
 </header>
 <main id="main" tabindex="-1">
-  <div class="wrap"><div class="state"><p>Chargement du serveur</p></div></div>
+  <div class="wrap"><div class="state"><p>Chargement</p></div></div>
 </main>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 <footer class="footer">
   <div class="wrap footer-inner">
     <span>{{SERVER_NAME}} · Données synchronisées en direct depuis Discord</span>
