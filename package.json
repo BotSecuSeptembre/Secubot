@@ -1,12 +1,13 @@
 {
   "name": "botsecu",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Bot Discord de sécurité complet : modération, automodération, antiraid, antinuke, vérification, modmail et logs.",
   "main": "src/index.js",
   "private": true,
   "scripts": {
     "start": "node src/index.js",
-    "check": "node scripts/check.js"
+    "check": "node scripts/check.js",
+    "admin-hash": "node scripts/admin-hash.js"
   },
   "engines": {
     "node": ">=20.0.0"

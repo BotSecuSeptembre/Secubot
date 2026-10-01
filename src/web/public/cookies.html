@@ -30,18 +30,19 @@
     <h1>Cookies et traceurs</h1>
     <p class="updated">Mise à jour le {{UPDATED}}</p>
 
-    <p>Ce site <strong>ne dépose aucun cookie</strong>. Il n'utilise ni outil de mesure d'audience, ni publicité, ni bouton de réseau social, ni police ou script chargé depuis un autre site.</p>
+    <p>Ce site <strong>ne dépose aucun cookie aux visiteurs</strong>. Seul l'espace d'administration, réservé à l'équipe, utilise un cookie de session. Il n'utilise ni outil de mesure d'audience, ni publicité, ni bouton de réseau social, ni police ou script chargé depuis un autre site.</p>
 
     <h2>Ce qui est enregistré dans votre navigateur</h2>
     <div class="table-scroll">
       <table>
         <thead><tr><th>Nom</th><th>Rôle</th><th>Durée</th><th>Type</th></tr></thead>
         <tbody>
+          <tr><td><code>__Host-admin</code></td><td>Garder l'équipe connectée à l'espace d'administration. Déposé uniquement après saisie du mot de passe, jamais pour les visiteurs.</td><td>8 heures maximum, 1 heure d'inactivité</td><td>Cookie de session, strictement nécessaire</td></tr>
           <tr><td><code>choix_images</code></td><td>Mémoriser votre choix sur les images Discord, accepté ou refusé, pour ne pas vous le redemander à chaque visite.</td><td>6 mois</td><td>Stockage local, strictement nécessaire</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Cette donnée reste dans votre navigateur. Elle n'est jamais envoyée au serveur ni à un tiers. Elle est exemptée de consentement car elle sert uniquement à respecter votre choix.</p>
+    <p>Le choix sur les images reste dans votre navigateur et n'est jamais envoyé au serveur ni à un tiers. Ces deux éléments sont exemptés de consentement : l'un sert uniquement à respecter votre choix, l'autre à sécuriser une connexion que vous avez demandée.</p>
 
     <h2>Contenu tiers soumis à votre accord</h2>
     <p>Les avatars des membres, l'icône, la bannière et les emojis du serveur sont hébergés par <strong>Discord</strong>. Les afficher oblige votre navigateur à les télécharger depuis les serveurs de Discord, qui reçoit alors votre adresse IP et des informations techniques sur votre navigateur.</p>
@@ -71,6 +72,7 @@
       <a href="/cgu">Conditions d'utilisation</a>
       <a href="/cookies">Cookies</a>
       <button type="button" class="linklike" data-consent-open>Gérer mes choix</button>
+      <a href="/admin">Administration</a>
     </nav>
   </div>
 </footer>

@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
 const crypto = require('node:crypto');
+const auth = require('./admin/auth');
 
 /**
  * Serveur HTTP du site, sans dépendance externe.
@@ -32,6 +33,7 @@ const PAGES = {
   '/confidentialite': 'confidentialite.html',
   '/cgu': 'cgu.html',
   '/cookies': 'cookies.html',
+  '/admin': 'admin.html',
 };
 
 const CSP = [
@@ -95,6 +97,119 @@ function send(req, res, status, type, body, extra = {}) {
   res.end(req.method === 'HEAD' ? undefined : payload);
 }
 
+// ---------- Espace d'administration ----------
+
+const MAX_BODY = 64 * 1024;
+
+function clientIp(req) {
+  // Derrière le proxy Railway, la dernière adresse de X-Forwarded-For est celle ajoutée par le proxy
+  const forwarded = String(req.headers['x-forwarded-for'] ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+  return forwarded.at(-1) || req.socket.remoteAddress || 'inconnue';
+}
+
+const isHttps = (req) => String(req.headers['x-forwarded-proto'] ?? '').split(',')[0].trim() === 'https';
+const cookieName = (req) => (isHttps(req) ? '__Host-admin' : 'admin');
+
+function readCookie(req, name) {
+  for (const part of String(req.headers.cookie ?? '').split(';')) {
+    const [k, ...v] = part.trim().split('=');
+    if (k === name) return v.join('=');
+  }
+  return null;
+}
+
+function sessionCookie(req, token, maxAge) {
+  return `${cookieName(req)}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${isHttps(req) ? '; Secure' : ''}`;
+}
+
+/** Refuse les requêtes envoyées depuis un autre site (protection CSRF). */
+function sameOrigin(req) {
+  const origin = req.headers.origin;
+  if (!origin) return false;
+  try {
+    return new URL(origin).host === req.headers.host;
+  } catch {
+    return false;
+  }
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let size = 0;
+    const chunks = [];
+    req.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > MAX_BODY) {
+        reject(new Error('too_large'));
+        req.destroy();
+      } else chunks.push(chunk);
+    });
+    req.on('end', () => {
+      try {
+        resolve(chunks.length ? JSON.parse(Buffer.concat(chunks).toString('utf8')) : {});
+      } catch {
+        reject(new Error('bad_json'));
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+function sendJson(res, status, data, extra = {}) {
+  const body = Buffer.from(JSON.stringify(data));
+  res.writeHead(status, { ...BASE_HEADERS, 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'Content-Length': body.length, ...extra });
+  res.end(body);
+}
+
+async function handleAdmin(req, res, pathname, url, source) {
+  const route = pathname.slice('/admin/api/'.length);
+  const ip = clientIp(req);
+  const token = readCookie(req, cookieName(req));
+
+  if (req.method === 'POST') {
+    if (!sameOrigin(req) || !/^application\/json\b/.test(req.headers['content-type'] ?? '')) return sendJson(res, 403, { error: 'Requête refusée.' });
+  }
+
+  if (route === 'session' && req.method === 'GET') return sendJson(res, 200, { authenticated: auth.checkSession(token) });
+
+  if (route === 'login' && req.method === 'POST') {
+    const wait = auth.lockedFor(ip);
+    if (wait) return sendJson(res, 429, { error: `Trop de tentatives. Réessaie dans ${Math.ceil(wait / 60)} min.` }, { 'Retry-After': String(wait) });
+    let body;
+    try {
+      body = await readBody(req);
+    } catch {
+      return sendJson(res, 400, { error: 'Requête invalide.' });
+    }
+    if (!(await auth.verifyPassword(body.password))) {
+      auth.recordFailure(ip);
+      console.warn(`[admin] Échec de connexion depuis ${ip}`);
+      return sendJson(res, 401, { error: 'Mot de passe incorrect.' });
+    }
+    const session = auth.createSession(ip);
+    console.log(`[admin] Connexion réussie depuis ${ip}`);
+    return sendJson(res, 200, { ok: true }, { 'Set-Cookie': sessionCookie(req, session, Math.floor(auth.SESSION_TTL / 1000)) });
+  }
+
+  if (!auth.checkSession(token)) return sendJson(res, 401, { error: 'Session expirée. Reconnecte toi.' });
+
+  if (route === 'logout' && req.method === 'POST') {
+    auth.destroySession(token);
+    return sendJson(res, 200, { ok: true }, { 'Set-Cookie': sessionCookie(req, '', 0) });
+  }
+
+  let body = null;
+  if (req.method === 'POST') {
+    try {
+      body = await readBody(req);
+    } catch {
+      return sendJson(res, 400, { error: 'Requête invalide.' });
+    }
+  }
+  const result = await source.admin({ method: req.method, route, query: url.searchParams, body, ip });
+  return sendJson(res, result.status, result.data);
+}
+
 function createSiteServer(source, { maxStreams = 1000 } = {}) {
   const files = loadStatic();
   const streams = new Set();
@@ -135,15 +250,25 @@ function createSiteServer(source, { maxStreams = 1000 } = {}) {
   };
 
   const server = http.createServer((req, res) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      res.writeHead(405, { ...BASE_HEADERS, Allow: 'GET, HEAD' });
-      return res.end();
-    }
     let pathname;
+    let url;
     try {
-      pathname = decodeURIComponent(new URL(req.url, 'http://local').pathname);
+      url = new URL(req.url, 'http://local');
+      pathname = decodeURIComponent(url.pathname);
     } catch {
       res.writeHead(400, BASE_HEADERS);
+      return res.end();
+    }
+
+    if (pathname.startsWith('/admin/api/') && source.admin && (req.method === 'GET' || req.method === 'POST')) {
+      return handleAdmin(req, res, pathname, url, source).catch((err) => {
+        console.error('[admin]', err);
+        if (!res.headersSent) sendJson(res, 500, { error: 'Erreur interne.' });
+      });
+    }
+
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      res.writeHead(405, { ...BASE_HEADERS, Allow: 'GET, HEAD' });
       return res.end();
     }
     if (pathname.length > 1 && pathname.endsWith('/')) pathname = pathname.slice(0, -1);
