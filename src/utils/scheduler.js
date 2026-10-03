@@ -3,6 +3,7 @@ const { logCase } = require('./moderation');
 const { sendLog } = require('./logger');
 const { embed } = require('./embed');
 const { runAutoBackups } = require('./backup');
+const { checkExpired: checkExpiredJails } = require('./jail');
 
 /**
  * Tâches périodiques :
@@ -53,6 +54,9 @@ function startScheduler(client) {
         }
       }
 
+      // Prison : libération des peines terminées (si le minuteur a été perdu au redémarrage)
+      await checkExpiredJails(guild);
+
       // Auto-kick des non vérifiés
       const v = g.config.verification;
       if (v.enabled && v.autoKickHours > 0 && v.verifiedRoleId) {
@@ -61,6 +65,7 @@ function startScheduler(client) {
           if (member.user.bot || member.roles.cache.has(v.verifiedRoleId)) continue;
           if (member.permissions.has('ManageMessages')) continue;
           if (g.verifications[member.id]?.status === 'pending') continue;
+          if (g.jails[member.id] || g.quarantine[member.id]) continue; // rôles retirés volontairement
           if (now - (member.joinedTimestamp ?? now) < limit) continue;
           if (!member.kickable) continue;
           await member

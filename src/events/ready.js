@@ -3,6 +3,7 @@ const db = require('../database');
 const config = require('../config');
 const { cacheGuildInvites } = require('../utils/invites');
 const { startScheduler } = require('../utils/scheduler');
+const { restoreTimers: restoreJailTimers } = require('../utils/jail');
 
 /** Applique la présence enregistrée (stream, dnd...) */
 function applyPresence(client) {
@@ -50,6 +51,7 @@ module.exports = {
       if (guild.memberCount < 50_000) await guild.members.fetch().catch(() => null);
     }
 
+    restoreJailTimers(client);
     startScheduler(client);
   },
 };

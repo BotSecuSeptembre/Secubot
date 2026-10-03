@@ -15,7 +15,7 @@
 
   var ROUTES = { tableau: 'Tableau de bord', membres: 'Membres', messages: 'Salons', sanctions: 'Sanctions', journaux: 'Journaux', bot: 'Bot' };
   var STATUS = { online: 'En ligne', idle: 'Absent', dnd: 'Ne pas déranger', offline: 'Hors ligne', invisible: 'Invisible' };
-  var CASE_TYPES = { warn: 'Avertissement', timeout: 'Mute', untimeout: 'Fin de mute', kick: 'Expulsion', ban: 'Bannissement', tempban: 'Ban temporaire', softban: 'Softban', unban: 'Débannissement', note: 'Note', automod: 'Automod', antiraid: 'Antiraid', antinuke: 'Antinuke', verification: 'Vérification', quarantine: 'Quarantaine', unquarantine: 'Fin de quarantaine' };
+  var CASE_TYPES = { warn: 'Avertissement', timeout: 'Mute', untimeout: 'Fin de mute', kick: 'Expulsion', ban: 'Bannissement', tempban: 'Ban temporaire', softban: 'Softban', unban: 'Débannissement', note: 'Note', automod: 'Automod', antiraid: 'Antiraid', antinuke: 'Antinuke', verification: 'Vérification', quarantine: 'Quarantaine', unquarantine: 'Fin de quarantaine', jail: 'Prison', unjail: 'Sortie de prison' };
   var MODULES = { automod: 'Automodération', antiraid: 'Antiraid', antinuke: 'Antinuke', verification: 'Vérification', modmail: 'Modmail', autoBackup: 'Sauvegarde automatique' };
   var VERIF = ['Aucun', 'Faible', 'Moyen', 'Élevé', 'Très élevé'];
   var PERMS = { Administrator: 'Administrateur', ManageGuild: 'Gérer le serveur', ManageRoles: 'Gérer les rôles', ManageChannels: 'Gérer les salons', BanMembers: 'Bannir', KickMembers: 'Expulser', ModerateMembers: 'Exclure temporairement', ManageMessages: 'Gérer les messages', MentionEveryone: 'Mentionner @everyone', ManageWebhooks: 'Gérer les webhooks', ViewAuditLog: 'Voir les logs d\'audit', ManageNicknames: 'Gérer les pseudos' };

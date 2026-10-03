@@ -21,6 +21,8 @@ const ACTION_LABELS = {
   verification: '🪪 Vérification',
   quarantine: '🔒 Quarantaine',
   unquarantine: '🔓 Fin de quarantaine',
+  jail: '⛓️ Prison',
+  unjail: '🔓 Sortie de prison',
 };
 
 const isOwner = (userId) => ownerIds.includes(userId);

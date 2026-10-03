@@ -3,6 +3,7 @@ const db = require('../database');
 const { findUsedInvite } = require('../utils/invites');
 const { trackUser } = require('../utils/analysis');
 const { checkJoin } = require('../utils/antiraid');
+const { onMemberJoin } = require('../utils/jail');
 const { sendLog } = require('../utils/logger');
 const { embed } = require('../utils/embed');
 const { ts, formatDuration } = require('../utils/time');
@@ -35,6 +36,9 @@ module.exports = {
     if (cfg.verification.enabled && cfg.verification.unverifiedRoleId) {
       await member.roles.add(cfg.verification.unverifiedRoleId, 'Vérification : membre non vérifié').catch(() => null);
     }
+
+    // Prison persistante : quitter/revenir ne permet pas d'en sortir
+    await onMemberJoin(member).catch((err) => console.error('[jail]', err));
 
     // Quarantaine persistante : quitter/revenir ne permet pas d'en sortir
     if (g.quarantine[member.id] && cfg.quarantine.roleId) {

@@ -4,6 +4,17 @@
  */
 module.exports = [
   {
+    version: '1.5.0',
+    date: '2026-10-03',
+    title: 'Prison (/jail)',
+    changes: [
+      '⛓️ /jail membre [temps] [raison] : retire tous les rôles, le membre ne voit plus que le salon prison (5 min par défaut)',
+      '⏱️ Rôles rendus automatiquement à la fin, même après un redémarrage du bot ; relancer /jail change la durée',
+      '🔁 Quitter et revenir ne permet pas de sortir de prison',
+      '🔓 /unjail pour libérer avant la fin • ⚙️ /jailconfig : salon prison, utilisateurs autorisés, durée par défaut, liste des prisonniers',
+    ],
+  },
+  {
     version: '1.4.0',
     date: '2026-10-01',
     title: 'Espace d\'administration sur le site',

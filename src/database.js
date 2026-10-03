@@ -22,6 +22,12 @@ const defaultGuildConfig = () => ({
   quarantine: {
     roleId: null,
   },
+  jail: {
+    channelId: '1545213377708818593', // salon prison
+    roleId: null, // créé automatiquement au premier /jail
+    allowedUsers: ['1490336978850418698'], // utilisateurs autorisés en plus des administrateurs
+    defaultMinutes: 5,
+  },
   autoBackup: false,
   modmail: {
     enabled: false,
@@ -154,11 +160,11 @@ class Database {
   /** Données brutes d'un serveur (config + historique). */
   guild(guildId) {
     if (!this.data.guilds[guildId]) {
-      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] } };
+      this.data.guilds[guildId] = { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] }, jails: {} };
       this.save();
     }
     const g = this.data.guilds[guildId];
-    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] } });
+    deepMerge(g, { config: defaultGuildConfig(), cases: [], warns: [], notes: [], modmail: {}, verifications: {}, members: {}, tempbans: [], quarantine: {}, lastAutoBackup: 0, temproles: [], site: { hidden: [] }, jails: {} });
     return g;
   }
 

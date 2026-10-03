@@ -150,6 +150,15 @@ Le bot sert aussi un site public qui affiche **en direct** le serveur : membres 
 | `/suspects recents/avatars/nouveaux_comptes` | Analyse de risque des arrivées, groupes d'avatars identiques, comptes très récents |
 | `/arrivees` | Dernières arrivées (âge du compte, invitation, vérifié ou non) |
 
+### ⛓️ Prison
+| Commande | Description |
+|---|---|
+| `/jail membre [temps] [raison]` | Retire tous les rôles du membre : il ne voit plus que le **salon prison**. 5 min par défaut, ex. `temps:1h`. Relancer la commande change la durée |
+| `/unjail membre` | Libère avant la fin et rend les rôles |
+| `/jailconfig voir/salon/autoriser/duree_defaut` | Salon prison, utilisateurs autorisés (en plus des admins), durée par défaut, prisonniers actuels |
+
+Utilisable par les **administrateurs** et les utilisateurs autorisés avec `/jailconfig autoriser`. Le bot crée un rôle « ⛓️ Prison » qui cache tous les salons (y compris les nouveaux) sauf le salon prison. Les rôles sont rendus automatiquement, même après un redémarrage, et quitter/revenir ne fait pas sortir de prison.
+
 ### 🔨 Modération
 `/ban` (avec durée = tempban) · `/unban` · `/kick` · `/softban` · `/mute` · `/unmute` · `/mutes` · `/warn` · `/warnings list/remove/clear` · `/purge` (filtres : membre, bots, liens, invitations, pièces jointes, texte) · `/slowmode` · `/lock` · `/hide` · `/nuke` · `/nick` · `/dehoist` · `/role` · `/roleall` · `/banlist` · `/case voir/raison` · `/modlogs` · `/modstats` · `/note` · `/snipe` · `/clearuser` (messages d'un utilisateur dans tous les salons) · `/temprole` · `/vocal` · `/prune` · `/export` (CSV pour Excel)
 
